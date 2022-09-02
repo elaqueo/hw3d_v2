@@ -58,6 +58,9 @@ Window::Window(int width, int height, const wchar_t* name)
 		throw WND_LAST_EXCEPT();
 	}
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+	// create gfx object
+	pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 Window::~Window() {
@@ -196,6 +199,11 @@ std::optional<int> Window::ProcessMessages() noexcept
 
 	return {};
 
+}
+
+Graphics& Window::Gfx()
+{
+	return *pGfx;
 }
 
 Window::WindowException::WindowException(int line, const char* file, HRESULT hr) noexcept

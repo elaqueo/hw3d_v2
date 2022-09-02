@@ -3,7 +3,9 @@
 #include "Exception.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
 #include <optional>
+#include <memory>
 
 class Window
 {
@@ -46,6 +48,7 @@ private:
 public:
 	void SetTitle(const std::wstring& title);
 	static std::optional<int> ProcessMessages() noexcept;
+	Graphics& Gfx();
 public:
 	Keyboard kbd;
 	Mouse mouse;
@@ -53,6 +56,7 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<Graphics> pGfx;
 };
 
 // error exception helper macro

@@ -21,4 +21,3 @@ private:
 private:
 	Window wnd;
 };
-
