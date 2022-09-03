@@ -74,7 +74,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NDBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -112,7 +112,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NDBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -148,21 +148,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="dxerr.cpp" />
+    <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="dxerr.h" />
+    <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Win32.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowsMessageMap.h" />
@@ -172,6 +178,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="chili.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DXGetErrorDescription.inl" />
+    <None Include="DXGetErrorString.inl" />
+    <None Include="DXTrace.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
