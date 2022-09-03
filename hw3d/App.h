@@ -21,6 +21,7 @@ public:
 private:
 	void DoFrame() {
 		wnd.Gfx().ClearBuffer(0.5f, 1.0f, 0.6f);
+		wnd.Gfx().DrawTestTriangle();
 		wnd.Gfx().EndFrame();
 	};
 private:
