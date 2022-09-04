@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include "Timer.h"
 #include <format>
 #include <string>
 
@@ -20,10 +21,11 @@ public:
 	}
 private:
 	void DoFrame() {
-		wnd.Gfx().ClearBuffer(0.5f, 1.0f, 0.6f);
-		wnd.Gfx().DrawTestTriangle();
+		wnd.Gfx().ClearBuffer(0.35f, 0.8f, 0.5f);
+		wnd.Gfx().DrawTestTriangle(timer.Peek());
 		wnd.Gfx().EndFrame();
 	};
 private:
 	Window wnd;
+	Timer timer;
 };

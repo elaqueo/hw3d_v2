@@ -110,18 +110,21 @@ void Graphics::ClearBuffer(float red, float green, float blue) noexcept
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 }
 
-void Graphics::DrawTestTriangle() {
+void Graphics::DrawTestTriangle(float angle) {
 	namespace wrl = Microsoft::WRL;
 
 	// vertices
 	struct Vertex {
 		float x;
 		float y;
+		float r;
+		float g;
+		float b;
 	};
 	const Vertex vertices[] = {
-		{0.0f, 0.5f},
-		{0.5f, -0.5f},
-		{-0.5f, -0.5f},
+		{0.0f, 0.5f, 1.0f, 0.0f, 0.0f},
+		{0.5f, -0.5f, 0.0f, 1.0f, 0.0f},
+		{-0.5f, -0.5f, 0.0f, 0.0f, 1.0f},
 	};
 
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -144,6 +147,38 @@ void Graphics::DrawTestTriangle() {
 	const UINT offset = 0u;
 	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
+	// Constant buffer
+	struct ConstantBuffer {
+		struct
+		{
+			float element[4][4];
+		} transformation;
+	};
+	const ConstantBuffer cb = {
+		{
+			(3.0f / 4.0f) * std::cos(angle),  std::sin(angle), 0.0f, 0.0f,
+			(3.0f / 4.0f) * -std::sin(angle), std::cos(angle), 0.0f, 0.0f,
+			                            0.0f,            0.0f, 1.0f, 0.0f,
+			                            0.0f,            0.0f, 0.0f, 1.0f,
+		}
+	};
+
+	wrl::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd = {
+		.ByteWidth = sizeof(cb),
+		.Usage = D3D11_USAGE_DYNAMIC,
+		.BindFlags = D3D11_BIND_CONSTANT_BUFFER,
+		.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
+		.MiscFlags = 0u,
+		.StructureByteStride = 0u,
+	};
+	D3D11_SUBRESOURCE_DATA csd = {
+		.pSysMem = &cb,
+	};
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
+
 	wrl::ComPtr<ID3DBlob> pBlob;
 
 	// Pixel shader
@@ -164,6 +199,7 @@ void Graphics::DrawTestTriangle() {
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC ied[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	GFX_THROW_INFO(pDevice->CreateInputLayout(
 		ied, (UINT)std::size(ied),
